@@ -1,0 +1,65 @@
+---
+title: "airbnb-price-detector"
+author: "Derek Mingyu MA"
+output: html_document
+---
+```{r setup}
+# install.packages("rvest")
+library(rvest)
+#origin <- html("https://www.airbnb.com/s/Hong-Kong/homes?checkin=2017-05-01&checkout=2017-05-02&allow_override%5B%5D=&s_tag=InLepZUj")
+#origin <- html("https://www.airbnb.com/rooms/13502151?checkin=2017-05-01&checkout=2017-05-02&s=InLepZUj")
+origin <- html("https://www.airbnb.com/rooms/13502151")
+```
+
+```{r 1}
+para1 = "2017-05-01"
+para2 = "2017-05-02"
+session <- html_session("https://www.airbnb.com/rooms/13502151")
+form <- html_form(session)[[1]]
+form <- set_values(form, checkin = para1, checkout = para2)
+
+# The rvest submit_form function is still under construction and does not work for web sites which build URLs (i.e. GET requests. It does seem to work for POST requests). 
+#url <- submit_form(session, indeed)
+
+# Version 1 of our submit_form function
+submit_form2 <- function(session, form){
+  library(XML)
+  url <- XML::getRelativeURL(form$url, session$url)
+  url <- paste(url,'?',sep='')
+  values <- as.vector(rvest:::submit_request(form)$values)
+  att <- names(values)
+  if (tail(att, n=1) == "NULL"){
+    values <- values[1:length(values)-1]
+    att <- att[1:length(att)-1]
+  }
+  q <- paste(att,values,sep='=')
+  q <- paste(q, collapse = '&')
+  q <- gsub(" ", "+", q)
+  url <- paste(url, q, sep = '')
+  html_session(url)
+}
+session1 <- submit_form2(session, form)
+```
+
+```{r 2}
+session <- html("https://www.airbnb.com/rooms/13502151?checkin=2017-05-01&checkout=2017-05-02")
+title <- session %>%
+  html_nodes("#listing_name") %>%
+  html_text()
+price <- session %>%
+  html_nodes(".book-it-panel .panel-body .book-it__subtotal .table .text-right span")%>%
+  html_text()
+test <- session %>%
+  html_nodes(".table") %>%
+  html_table(fill=TRUE) %>%
+  data.frame()
+  #html_nodes("[itemprop=price]") %>%
+  #html_text()
+```
+
+```{r test}
+session <- html_session("https://www.indeed.com/jobs?q=data+science&l=new+york")
+test5 <- session %>% 
+  html_nodes("[itemprop=title]") %>%
+  html_attr("title")
+```
