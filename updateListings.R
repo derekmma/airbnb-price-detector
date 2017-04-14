@@ -6,7 +6,8 @@
 
 ##### SETTING PART #####
 #SET PATH TO CSV FILE
-path <- ""
+path <- "/Users/derek/Google Drive/Proj/airbnb-price-detector/test.csv"
+date <- Sys.Date()
 
 # SET ENVIRONMENT
 # If you havnen't install these libs, please run following lines to install them
@@ -15,40 +16,93 @@ path <- ""
 # install.packages("xml2")
 # install.packages("RSelenium")
 # install.packages("stringr")
+# install.packages("dplyr")
 library(rvest)
 library(httr)
 library(xml2)
 library(RSelenium)
 library(stringr)
+library(dplyr)
 
 ##### SOURCE PART #####
 
-# FUNCTION: VISIT SEARCH PAGES AND GRAB URL INFORMATION
+# FUNCTION: GRAB INFORMATION FOR A LISTING
 roomInfo <- function(sublink,remDr) {
   base <- "https://www.airbnb.com"
   url <- paste(base, sublink, sep = '')
   remDr$navigate(url)
-  roomNameSrc <- remDr$findElement(value = "//div[@id = 'listing_name']")
-  roomName <- roomNameSrc$getElementText()
-  roomPriceSrc <- remDr$findElement(value = "//meta[@itemprop = 'price']")
-  roomPrice <- roomPriceSrc$getElementAttribute("content")
-  roomPriceTotalSrc <- remDr$findElement(value = "//td[@class='text-right']/span[@class = 'text_5mbkop-o_O-size_small_1gg2mc-o_O-weight_bold_153t78d-o_O-inline_g86r3e']")
-  roomPriceTotal <- roomPriceTotalSrc$getElementText()
-  regexp <- "[[:digit:]]+"
-  roomName <- roomName[[1]]
-  roomPrice <- roomPrice[[1]]
-  roomPriceTotal <- str_extract(roomPriceTotal[1], regexp)
+  
+  roomName <- tryCatch({
+    suppressMessages({
+      roomNameSrc <- remDr$findElement(value = "//div[@id = 'listing_name']")
+      roomNameSrc$getElementText()
+    })
+  }, 
+  error = function(e) {
+    NA
+  })
+  
+  roomPrice <- tryCatch({
+    suppressMessages({
+      roomPriceSrc <- remDr$findElement(value = "//span[@class = 'priceAmountWrapper_17axpax']")
+      roomPriceSrc$getElementText()[[1]]
+    })
+  }, 
+  error = function(e) {
+    NA
+  })
+  
+  if (is.na(roomPrice)){
+    roomPrice <- tryCatch({
+      suppressMessages({
+        roomPriceSrc <- remDr$findElement(value = "//meta[@itemprop = 'price']")
+        roomPriceSrc$getElementAttribute("content")[[1]]
+      })
+    }, 
+    error = function(e) {
+      NA
+    })
+  }
+  
+  roomPriceTotal <- tryCatch({
+    suppressMessages({
+      roomPriceTotalSrc <- remDr$findElement(value = "//td[@class='text-right']/span[@class = 'text_5mbkop-o_O-size_small_1gg2mc-o_O-weight_bold_153t78d-o_O-inline_g86r3e']")
+      roomPriceTotalSrc$getElementText()[[1]]
+    })
+  }, 
+  error = function(e) {
+    NA
+  })
+  
+  #regexp <- "(\\d)+|(\\d+\\.\\d+)|(\\d+,\\d+)"
+  #roomPriceTotal <- str_extract(roomPriceTotal[1], regexp)
+  print(roomPrice)
+  print(roomName)
+  print(roomPriceTotal)
   c(roomName,roomPrice,roomPriceTotal)
 }
 
-# GET DATA FOR EACH CITY AND COMBINE
+
+# GET DATA FOR CSV and ADD COLUMNS
+listings <- read.csv(path, stringsAsFactors = FALSE)
+listings <- listings[,-1]
+listings[[paste0("price_",date)]] <- NA
+listings[[paste0("totalPrice_",date)]] <- NA
+# START SERVER
 rD <- rsDriver()
 remDr <- rD[["client"]]
-for (city in cities){
-  cityListings <- 
-    getInitialRoomUrlList(city,dateCheckIn,dateCheckOut,numSample)
-  listings <- rbind(listings,cityListings)
+colPrice <- paste("price",date,sep="_")
+colTotalPrice <- paste("totalPrice",date,sep="_")
+for (i in 1:nrow(listings)){
+  info <- roomInfo(listings[i,"url"],remDr)
+  print(info)
+  listings[i,"name"] <- info[1]
+  listings[i,colPrice] <- info[2]
+  listings[i,colTotalPrice] <- info[3]
 }
+rD[["server"]]$stop()
 
 # EXPORT CSV
-write.csv(listings, file = "listings_update.csv")
+temp <- paste("listings",date,sep="_")
+fileName <- paste0(temp,".csv")
+write.csv(listings, file = fileName)
