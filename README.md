@@ -1,37 +1,78 @@
-## Welcome to GitHub Pages
+# Airbnb Price Detector
 
-You can use the [editor on GitHub](https://github.com/derekmma/airbnb-price-detector/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Derek Mingyu MA
+[derek.ma](http://derek.ma)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+This is a series of R programs that enables users to create initial listings URLs and update these listings' prices automatically. 
 
-### Markdown
+## Data Source
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Price and Listings information is grabbed from Airbnb web app.
 
-```markdown
-Syntax highlighted code block
+## How to Use?
 
-# Header 1
-## Header 2
-### Header 3
+### Step1: Set up R and related libraries
 
-- Bulleted
-- List
+A few libraries are needed. Please run the following codes to install them if you haven't
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+install.packages("rvest")
+install.packages("httr")
+install.packages("xml2")
+install.packages("RSelenium")
+install.packages("stringr")
+install.packages("dplyr")
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Step2: Download Codes
 
-### Jekyll Themes
+Please clone or download codes from GitHub. Two R programs are needed:
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/derekmma/airbnb-price-detector/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+* [`getInitialListings.R`](https://github.com/derekmma/airbnb-price-detector/blob/master/getInitialListings.R)
+* [`updateListings.R`](https://github.com/derekmma/airbnb-price-detector/blob/master/updateListings.R)
 
-### Support or Contact
+### Step3: Get Initial Listings
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Please run `getInitialListings.R`. Following parameters need be declared at the beginning of the file:
+
+#### `cities`
+* cities that you would like to get listings
+* please use the city code that Airbnb
+* you can find the city code through make a query from Airbnb official web app and observe the query url
+
+#### `dateCheckIn`
+* the check in date
+* please follow the format: "YYYY-MM-DD"
+
+#### `dateCheckOut`
+* the check out date
+* please follow the format: "YYYY-MM-DD"
+
+#### `numSample`
+* sample size for _each_ city
+
+Then a csv file called `listings.csv` will be exported to the root directory.
+
+### Step4: Get Updated Listings Info
+
+Run `updateListings.R` and claim the previous file path at the beginning of the program.
+
+Then the program will open corresponding pages for each listings imported from the csv file by _Google Chrome_.
+
+The program will update the `name` for each listings and add two new columns to the data frame which are:
+
+#### `price_YYYY-MM-DD`
+
+* This is the basic price for one night
+* Sometimes is `NA`, which is because the program cannot grab this information automatically
+* There are two approaches to grab this information which are both included in the program, so that the error rate can be decreased
+* `YYYY-MM-DD` is the date when you run this program
+
+#### `totalPrice_YYYY-MM-DD`
+
+* This is the price including room prices, service fee and cleaning fee
+* Sometimes it can be `NA`, the reason is the same as the `price_YYYY-MM-DD` above.
+
+Finally, a new file called `listings_YYYY-MM-DD.csv` will be saved to your root directory where `YYYY-MM-DD` is the date you run the program. The exported csv file can be used to run `updateListings.R` again.
+
+
