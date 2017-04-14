@@ -25,10 +25,7 @@ dateCheckOut <- "2017-05-02"
 
 # 3- Number of Listings For Each City
 #   total sample size: num*num(cities)
-numSample <- 150
-
-
-##### SOURCE PART #####
+numSample <- 200
 
 # SET ENVIRONMENT
 # If you havnen't install these libs, please run following lines to install them
@@ -42,6 +39,8 @@ library(httr)
 library(xml2)
 library(RSelenium)
 library(stringr)
+
+##### SOURCE PART #####
 
 # FUNCTION: VISIT SEARCH PAGES AND GRAB URL INFORMATION
 getInitialRoomUrlList <- function(city, checkInDate, checkOutDate, num){
@@ -74,7 +73,8 @@ getInitialRoomUrlList <- function(city, checkInDate, checkOutDate, num){
       html_attr("href")
     roomsLink <- as.vector(rbind(roomsLink,thisPageResult)) 
   }
-  result <- data.frame(url = roomsLink[1:num], 
+  result <- data.frame(url = roomsLink[1:num],
+                       name = NA,
                        city = city,
                        checkInDate = checkInDate, 
                        checkOutDate = checkOutDate)
@@ -82,8 +82,8 @@ getInitialRoomUrlList <- function(city, checkInDate, checkOutDate, num){
 }
 
 # GET DATA FOR EACH CITY AND COMBINE
-listings <- data.frame(matrix(ncol = 4, nrow = 0))
-colnames(listings) <- c("url","city","checkInDate","checkOutDate")
+listings <- data.frame(matrix(ncol = 5, nrow = 0))
+colnames(listings) <- c("url","name","city","checkInDate","checkOutDate")
 for (city in cities){
   cityListings <- 
     getInitialRoomUrlList(city,dateCheckIn,dateCheckOut,numSample)
