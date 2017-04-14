@@ -80,6 +80,6 @@ The program will update the `name` for each listings and add two new columns to 
 
 Finally, a new file called `listings_YYYY-MM-DD.csv` will be saved to your root directory where `YYYY-MM-DD` is the date you run the program. The exported csv file can be used to run `updateListings.R` again.
 
-A sample output file is shown here: [listings_2017-04-14](https://github.com/derekmma/airbnb-price-detector/blob/master/listings_2017-04-14.csv).
+A sample output file is shown here: [listings_2017-04-14.csv](https://github.com/derekmma/airbnb-price-detector/blob/master/listings_2017-04-14.csv).
 
 
