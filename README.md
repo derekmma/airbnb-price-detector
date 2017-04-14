@@ -2,6 +2,7 @@
 
 Derek Mingyu MA
 [derek.ma](http://derek.ma)
+[derek.ma/airbnb-price-detector](http://derek.ma/airbnb-price-detector)
 
 This is a series of R programs that enables users to create initial listings URLs and update these listings' prices automatically. 
 
