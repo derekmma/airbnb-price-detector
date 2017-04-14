@@ -54,9 +54,13 @@ Please run `getInitialListings.R`. Following parameters need be declared at the 
 
 Then a csv file called `listings.csv` will be exported to the root directory.
 
+A sample is shown here: [listings.csv](https://github.com/derekmma/airbnb-price-detector/blob/master/listings.csv).
+
 ### Step4: Get Updated Listings Info
 
 Run `updateListings.R` and claim the previous file path at the beginning of the program.
+
+A sample input data is shown here: [test.csv](https://github.com/derekmma/airbnb-price-detector/blob/master/test.csv).
 
 Then the program will open corresponding pages for each listings imported from the csv file by _Google Chrome_.
 
@@ -75,5 +79,7 @@ The program will update the `name` for each listings and add two new columns to 
 * Sometimes it can be `NA`, the reason is the same as the `price_YYYY-MM-DD` above.
 
 Finally, a new file called `listings_YYYY-MM-DD.csv` will be saved to your root directory where `YYYY-MM-DD` is the date you run the program. The exported csv file can be used to run `updateListings.R` again.
+
+A sample output file is shown here: [listings_2017-04-14](https://github.com/derekmma/airbnb-price-detector/blob/master/listings_2017-04-14.csv).
 
 
