@@ -6,7 +6,7 @@
 
 ##### SETTING PART #####
 #SET PATH TO CSV FILE
-path <- "/Users/derek/Google Drive/Proj/airbnb-price-detector/test.csv"
+path <- "/Users/derek/Google Drive/Proj/airbnb-price-detector/listings.csv"
 date <- Sys.Date()
 
 # SET ENVIRONMENT
