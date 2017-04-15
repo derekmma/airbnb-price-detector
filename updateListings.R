@@ -6,7 +6,7 @@
 
 ##### SETTING PART #####
 #SET PATH TO CSV FILE
-path <- "/Users/derek/Google Drive/Proj/airbnb-price-detector/test.csv"
+path <- "/Users/derek/Google Drive/Proj/airbnb-price-detector/listings_2017-04-14.csv"
 date <- Sys.Date()
 
 # SET ENVIRONMENT
@@ -76,9 +76,6 @@ roomInfo <- function(sublink,remDr) {
   
   #regexp <- "(\\d)+|(\\d+\\.\\d+)|(\\d+,\\d+)"
   #roomPriceTotal <- str_extract(roomPriceTotal[1], regexp)
-  print(roomPrice)
-  print(roomName)
-  print(roomPriceTotal)
   c(roomName,roomPrice,roomPriceTotal)
 }
 
