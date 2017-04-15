@@ -6,7 +6,7 @@
 
 ##### SETTING PART #####
 #SET PATH TO CSV FILE
-path <- "/Users/derek/Google Drive/Proj/airbnb-price-detector/listings_2017-04-14.csv"
+path <- "/Users/derek/Google Drive/Proj/airbnb-price-detector/test.csv"
 date <- Sys.Date()
 
 # SET ENVIRONMENT
@@ -31,6 +31,7 @@ roomInfo <- function(sublink,remDr) {
   base <- "https://www.airbnb.com"
   url <- paste(base, sublink, sep = '')
   remDr$navigate(url)
+  regexp <- "(\\d)+"
   
   roomName <- tryCatch({
     suppressMessages({
@@ -45,7 +46,9 @@ roomInfo <- function(sublink,remDr) {
   roomPrice <- tryCatch({
     suppressMessages({
       roomPriceSrc <- remDr$findElement(value = "//span[@class = 'priceAmountWrapper_17axpax']")
-      roomPriceSrc$getElementText()[[1]]
+      temp1 <- roomPriceSrc$getElementText()[[1]]
+      temp2 <- str_extract_all(temp1, regexp)
+      paste(temp2[[1]], collapse = '')
     })
   }, 
   error = function(e) {
@@ -56,7 +59,9 @@ roomInfo <- function(sublink,remDr) {
     roomPrice <- tryCatch({
       suppressMessages({
         roomPriceSrc <- remDr$findElement(value = "//meta[@itemprop = 'price']")
-        roomPriceSrc$getElementAttribute("content")[[1]]
+        temp1 <- roomPriceSrc$getElementAttribute("content")[[1]]
+        temp2 <- str_extract_all(temp1, regexp)
+        paste(temp2[[1]], collapse = '')
       })
     }, 
     error = function(e) {
@@ -67,15 +72,15 @@ roomInfo <- function(sublink,remDr) {
   roomPriceTotal <- tryCatch({
     suppressMessages({
       roomPriceTotalSrc <- remDr$findElement(value = "//td[@class='text-right']/span[@class = 'text_5mbkop-o_O-size_small_1gg2mc-o_O-weight_bold_153t78d-o_O-inline_g86r3e']")
-      roomPriceTotalSrc$getElementText()[[1]]
+      temp1 <- roomPriceTotalSrc$getElementText()[[1]]
+      temp2 <- str_extract_all(temp1, regexp)
+      paste(temp2[[1]], collapse = '')
     })
   }, 
   error = function(e) {
     NA
   })
   
-  #regexp <- "(\\d)+|(\\d+\\.\\d+)|(\\d+,\\d+)"
-  #roomPriceTotal <- str_extract(roomPriceTotal[1], regexp)
   c(roomName,roomPrice,roomPriceTotal)
 }
 
