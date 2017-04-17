@@ -86,17 +86,25 @@ roomInfo <- function(sublink,remDr) {
 
 
 # GET DATA FOR CSV and ADD COLUMNS
-listings <- read.csv(path, stringsAsFactors = FALSE)
-listings <- listings[,-1]
-listings[[paste0("price_",date)]] <- NA
-listings[[paste0("totalPrice_",date)]] <- NA
+# if you run this program from the beginning, set startCount to 1
+# otherwise set startCount to the record it stops
+startCount <- 1
+if (startCount == 1){
+  listings <- read.csv(path, stringsAsFactors = FALSE)
+  listings <- listings[,-1]
+  listings[[paste0("price_",date)]] <- NA
+  listings[[paste0("totalPrice_",date)]] <- NA
+} else {
+  rD[["server"]]$stop()
+}
 # START SERVER
-rD <- rsDriver()
+rD <- rsDriver(browser="firefox")
 remDr <- rD[["client"]]
 colPrice <- paste("price",date,sep="_")
 colTotalPrice <- paste("totalPrice",date,sep="_")
-for (i in 1:nrow(listings)){
+for (i in startCount:nrow(listings)){
   info <- roomInfo(listings[i,"url"],remDr)
+  print(i)
   print(info)
   listings[i,"name"] <- info[1]
   listings[i,colPrice] <- info[2]
