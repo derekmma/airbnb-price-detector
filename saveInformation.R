@@ -113,7 +113,7 @@ roomInfo <- function(sublink,remDr) {
     NA
   })
   
-  if (is.na(ratingSrc)){
+  if (length(ratingSrc)==0){
     ratingAccuracy <- NA
     ratingCommunication <- NA
     ratingCleanliness <- NA
@@ -452,4 +452,5 @@ rD[["server"]]$stop()
 # EXPORT CSV
 temp <- paste("listings",date,sep="_")
 fileName <- paste0(temp,".csv")
-write.csv(listings, file = fileName)
+fileName1 <- "listingsInfo.csv"
+write.csv(listings, file = fileName1)
