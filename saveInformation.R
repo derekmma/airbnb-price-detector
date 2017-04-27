@@ -433,7 +433,7 @@ colTotalPrice <- "totalPrice"
 for (i in startCount:nrow(listings)){
   info <- roomInfo(listings[i,"url"],remDr)
   print(i)
-  print(info)
+  #print(info)
   listings[i,"name"] <- info[1]
   listings[i,colPrice] <- info[2]
   listings[i,colTotalPrice] <- info[3]
