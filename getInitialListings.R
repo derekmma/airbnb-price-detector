@@ -79,8 +79,9 @@ getInitialRoomUrlList <- function(city, checkInDate, checkOutDate, num){
     
     session <- read_html(queryurl)
     thisPageResult <- session %>%
-      html_nodes(".linkContainer_55zci1")%>%
+      html_nodes(".linkContainer_15ns6vh")%>%
       html_attr("href")
+    print(thisPageResult)
     roomsLink <- as.vector(rbind(roomsLink,thisPageResult)) 
   }
   result <- data.frame(url = roomsLink[1:num],
