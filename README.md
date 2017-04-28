@@ -79,7 +79,7 @@ Finally, a new file called `listings_YYYY-MM-DD.csv` will be saved to your root 
 
 ## Function3: Grab Comprehensive Info of Listings
 
-Run `getInformation.R` to get rating, review numbers, amenities information about the listings:
+Run `saveInformation.R` to get rating, review numbers, amenities information about the listings:
 
 * [`saveInformation.R`](https://github.com/derekmma/airbnb-price-detector/blob/master/saveInformation.R)
 
