@@ -4,15 +4,13 @@ Derek Mingyu MA
 [derek.ma](http://derek.ma)  
 [derek.ma/airbnb-price-detector](http://derek.ma/airbnb-price-detector)
 
-This is a series of R programs that enables users to create initial listings URLs and update these listings' prices automatically. 
+This is a series of R programs that enables users to create initial listings URLs and update these listings' prices automatically. You can also use this R programs to grab different comprehensive information about listings on Airbnb.
 
 ## Data Source
 
 Price and Listings information is grabbed from Airbnb web app.
 
-## How to Use?
-
-### Step1: Set up R and related libraries
+## Set Up
 
 A few libraries are needed. Please run the following codes to install them if you haven't
 
@@ -25,16 +23,13 @@ install.packages("stringr")
 install.packages("dplyr")
 ```
 
-### Step2: Download Codes
+## Function1: Create Initial Listings on Airbnb
 
-Please clone or download codes from GitHub. Two R programs are needed:
+Use the R program `getInitialListings.R` to get initial listings with url, city and check in/out date:
 
 * [`getInitialListings.R`](https://github.com/derekmma/airbnb-price-detector/blob/master/getInitialListings.R)
-* [`updateListings.R`](https://github.com/derekmma/airbnb-price-detector/blob/master/updateListings.R)
 
-### Step3: Get Initial Listings
-
-Please run `getInitialListings.R`. Following parameters need be declared at the beginning of the file:
+Following parameters need be declared at the beginning of the file:
 
 #### `cities`
 * cities that you would like to get listings
@@ -54,15 +49,17 @@ Please run `getInitialListings.R`. Following parameters need be declared at the 
 
 Then a csv file called `listings.csv` will be exported to the root directory.
 
-A sample is shown here: [listings.csv](https://github.com/derekmma/airbnb-price-detector/blob/master/listings.csv).
+Output is a csv that contain url, city and check in/out date. 
 
-### Step4: Get Updated Listings Info
+## Function2: Update Prices of Different Days
+
+Input a initial listings table and get prices and total prices of listings:
+
+* [`updateListings.R`](https://github.com/derekmma/airbnb-price-detector/blob/master/updateListings.R)
 
 Run `updateListings.R` and claim the previous file path at the beginning of the program.
 
-A sample input data is shown here: [test.csv](https://github.com/derekmma/airbnb-price-detector/blob/master/test.csv).
-
-Then the program will open corresponding pages for each listings imported from the csv file by _Google Chrome_.
+Then the program will open corresponding pages for each listings imported from the csv file by _Firefox_.
 
 The program will update the `name` for each listings and add two new columns to the data frame which are:
 
@@ -80,6 +77,26 @@ The program will update the `name` for each listings and add two new columns to 
 
 Finally, a new file called `listings_YYYY-MM-DD.csv` will be saved to your root directory where `YYYY-MM-DD` is the date you run the program. The exported csv file can be used to run `updateListings.R` again.
 
-A sample output file is shown here: [listings_2017-04-15.csv](https://github.com/derekmma/airbnb-price-detector/blob/master/listings_2017-04-15.csv).
+## Function3: Grab Comprehensive Info of Listings
 
+Run `getInformation.R` to get rating, review numbers, amenities information about the listings:
+
+* [`getInformation.R`](https://github.com/derekmma/airbnb-price-detector/blob/master/getInformation.R)
+
+## Sample I/O File
+
+#### Function 1 Sample
+
+* Input: no need
+* Output: [`listings.csv`](https://github.com/derekmma/airbnb-price-detector/blob/master/sampleData_2/listings.csv)
+
+#### Function 2 Sample
+
+* Input: [`listings.csv`](https://github.com/derekmma/airbnb-price-detector/blob/master/sampleData_2/listings.csv)
+* Output: [`listings_2017-04-18.csv`](https://github.com/derekmma/airbnb-price-detector/blob/master/sampleData_2/listings_2017-04-18.csv)
+
+#### Function 3 Sample
+
+* Input: [`listings_1.csv`](https://github.com/derekmma/airbnb-price-detector/blob/master/sampleData_1/listings_1.csv)
+* Output: [`listingsInfo_1.csv`](https://github.com/derekmma/airbnb-price-detector/blob/master/sampleData_1/listingsInfo_1.csv)
 
