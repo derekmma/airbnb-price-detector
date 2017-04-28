@@ -150,34 +150,27 @@ roomInfo <- function(sublink,remDr) {
     NA
   })
   
-  if (is.na(capacitySrc)){
+  if(length(capacitySrc)==4){
+    capacityRoomType <- capacitySrc[[1]]$getElementText()
+    capacityNumGuests <- capacitySrc[[2]]$getElementText()
+    capacityNumBedrooms <- capacitySrc[[3]]$getElementText()
+    capacityNumBeds <- capacitySrc[[4]]$getElementText()
+  }
+  else if(length(capacitySrc)==3){
+    capacityRoomType <- capacitySrc[[1]]$getElementText()
+    capacityNumGuests <- capacitySrc[[2]]$getElementText()
+    capacityNumBedrooms <- capacitySrc[[3]]$getElementText()
+    capacityNumBeds <- NA
+  }else if(length(capacitySrc)==2){
+    capacityRoomType <- capacitySrc[[1]]$getElementText()
+    capacityNumGuests <- capacitySrc[[2]]$getElementText()
+    capacityNumBedrooms <- NA
+    capacityNumBeds <- NA
+  }else{
     capacityRoomType <- NA
     capacityNumGuests <- NA
     capacityNumBedrooms <- NA
     capacityNumBeds <- NA
-  }else{
-    if(length(capacitySrc)==4){
-      capacityRoomType <- capacitySrc[[1]]$getElementText()
-      capacityNumGuests <- capacitySrc[[2]]$getElementText()
-      capacityNumBedrooms <- capacitySrc[[3]]$getElementText()
-      capacityNumBeds <- capacitySrc[[4]]$getElementText()
-    }
-    else if(length(capacitySrc)==3){
-      capacityRoomType <- capacitySrc[[1]]$getElementText()
-      capacityNumGuests <- capacitySrc[[2]]$getElementText()
-      capacityNumBedrooms <- capacitySrc[[3]]$getElementText()
-      capacityNumBeds <- NA
-    }else if(length(capacitySrc)==2){
-      capacityRoomType <- capacitySrc[[1]]$getElementText()
-      capacityNumGuests <- capacitySrc[[2]]$getElementText()
-      capacityNumBedrooms <- NA
-      capacityNumBeds <- NA
-    }else{
-      capacityRoomType <- NA
-      capacityNumGuests <- NA
-      capacityNumBedrooms <- NA
-      capacityNumBeds <- NA
-    }
   }
   
   amenitiesSrc <- tryCatch({
